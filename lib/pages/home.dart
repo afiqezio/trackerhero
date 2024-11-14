@@ -45,7 +45,6 @@ class _FormPageState extends State<FormPage> {
     // Check if location services are enabled
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled, show an error
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Location services are disabled.")),
       );
@@ -57,7 +56,6 @@ class _FormPageState extends State<FormPage> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // Permissions are denied, show an error
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Location permissions are denied")),
         );
@@ -81,7 +79,6 @@ class _FormPageState extends State<FormPage> {
         _userLocation = LatLng(_latitude!, _longitude!);
       });
 
-      // Move the map to the new location
       _mapController.move(_userLocation!, 13.0);
     }
 
@@ -97,7 +94,7 @@ class _FormPageState extends State<FormPage> {
           actions: [
             TextButton(
               onPressed: () async {
-                Navigator.pop(context); // Close dialog
+                Navigator.pop(context);
                 final XFile? image = await _picker.pickImage(source: ImageSource.camera);
                 if (image != null) {
                   setState(() {
@@ -110,7 +107,7 @@ class _FormPageState extends State<FormPage> {
             ),
             TextButton(
               onPressed: () async {
-                Navigator.pop(context); // Close dialog
+                Navigator.pop(context);
                 final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
                 if (image != null) {
                   setState(() {
@@ -127,7 +124,6 @@ class _FormPageState extends State<FormPage> {
     );
   }
 
-  // Remove an attachment from the list
   void _removeAttachment(int index) {
     setState(() {
       _attachments.removeAt(index);
@@ -279,14 +275,6 @@ class _FormPageState extends State<FormPage> {
                     ),
                     SizedBox(height: 16),
 
-                    // // Display Latitude and Longitude
-                    // if (_latitude != null && _longitude != null)
-                    //   Text(
-                    //     'Current Location: Latitude $_latitude, Longitude $_longitude',
-                    //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    //   ),
-                    // SizedBox(height: 16),
-
                     // Map with a marker
                     Container(
                       height: 250,
@@ -363,7 +351,7 @@ class _FormPageState extends State<FormPage> {
                           int index = entry.key;
                           File file = entry.value;
                           return Stack(
-                            clipBehavior: Clip.none,  // Allow the delete icon to overlap
+                            clipBehavior: Clip.none,
                             children: [
                               Image.file(
                                 file,
@@ -391,17 +379,18 @@ class _FormPageState extends State<FormPage> {
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState?.validate() ?? false) {
-                          final selectedOption = _selectedItem;
-                          final field1Text = _textField1Controller.text;
-                          final field2Text = _textField2Controller.text;
-                          final field3Text = _textField3Controller.text;
-                          final field4Text = _textField4Controller.text;
+                          if (_selectedItem == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Please select a Visit Type"),
+                                backgroundColor: Colors.red),
+                            );
+                            return;
+                          }
 
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text(
-                                'Submitted: Option=$selectedOption, Field1=$field1Text, Field2=$field2Text, Field3=$field3Text, Field4=$field4Text',
-                              ),
+                              content: Text('Submitted!'),
+                              backgroundColor: Colors.green,
                             ),
                           );
                         }
