@@ -3,4 +3,4 @@
 Trackerhero assessment answer
 
 ## About
-A simple 'Site Visit' page that includes forms and a map displaying the user's current location with a marker.
+This is a simple 'Site Visit' page that includes a form and a map displaying the user's current location with a marker. It was built using Flutter version 3.24.4.
